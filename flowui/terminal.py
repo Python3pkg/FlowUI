@@ -31,15 +31,13 @@ import re
 import flowui.theme
 
 
-class Terminal(object):
+class Terminal(object, metaclass=abc.ABCMeta):
     '''Abstract base class for terminals
 
     Provides the base class for any terminal emulator used as an output device
     with FlowUI.
 
     '''
-
-    __metaclass__ = abc.ABCMeta
 
     DEFAULT_WIDTH = 80
     DEFAULT_HEIGHT = 25
@@ -132,7 +130,7 @@ class AnsiTerminal(Terminal):
 
     def _faces_dict(self, theme_, depth):
         d = {}
-        for f in theme_.faces.keys():
+        for f in list(theme_.faces.keys()):
             face = theme_.face(f, depth)
             d[repr(f)] = self._fmt_depth(face, depth)
         return d

@@ -46,7 +46,7 @@ class ThemeTest(object):
 
     def test_faces(self):
         self._terminal.reset()
-        for name in self._theme.faces.keys():
+        for name in list(self._theme.faces.keys()):
             self._terminal.write('\n\t%%(%s)s[%s]' % (name, name))
 
         self._terminal.reset()

@@ -128,7 +128,7 @@ class ThemeMeta(type):
 
     def _process_face(cls, facesdefs, face):
         face_colors = {}
-        for colors, fdefs in facesdefs[face].items():
+        for colors, fdefs in list(facesdefs[face].items()):
             assert type(colors) is depth
             face_colors[colors] = cls._process_color(fdefs)
 
@@ -137,7 +137,7 @@ class ThemeMeta(type):
     def process_faces(cls, name, facesdefs=None):
         faces = {}
         facesdefs = facesdefs or cls.faces[name]
-        for face in facesdefs.keys():
+        for face in list(facesdefs.keys()):
             if type(face) is _Face:
                 faces[face] = cls._process_face(facesdefs, face)
 
@@ -150,7 +150,7 @@ class ThemeMeta(type):
         faces = {}
         for c in itertools.chain((cls,), cls.__mro__):
             fcs = c.__dict__.get('faces', {})
-            for name, components in fcs.items():
+            for name, components in list(fcs.items()):
                 current = faces.get(name)
                 if current is None:
                     faces[name] = components
@@ -165,7 +165,7 @@ class ThemeMeta(type):
         return type.__call__(cls, *args, **kwds)
 
 
-class Theme(object):
+class Theme(object, metaclass=ThemeMeta):
     '''Base class for all FlowUI themes
 
     The Theme class provides all the basic functionality required to make a
@@ -197,7 +197,6 @@ class Theme(object):
     face-header     -- section headers etc
 
     '''
-    __metaclass__ = ThemeMeta
 
     name = None
     colors = []
